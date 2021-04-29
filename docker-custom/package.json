@@ -1,8 +1,8 @@
 {
-    "name": "node-red-docker",
-    "version": "1.3.4",
+    "name": "tiger-flow-docker",
+    "version": "1.0.0",
     "description": "Low-code programming for event-driven applications",
-    "homepage": "http://nodered.org",
+    "homepage": "https://tigergraph.com",
     "license": "Apache-2.0",
     "repository": {
         "type": "git",
