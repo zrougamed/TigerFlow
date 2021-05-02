@@ -20,34 +20,41 @@ RUN set -ex && \
         openssl \
         openssh-client \
         ca-certificates && \
-    mkdir -p /usr/src/node-red /data && \
+    mkdir -p /usr/src/node-red /flows /data && \
     deluser --remove-home node && \
     adduser -h /usr/src/node-red -D -H node-red -u 1000 && \
+    chown -R node-red:root /flows && chmod -R g+rwX /flows && \
     chown -R node-red:root /data && chmod -R g+rwX /data && \
     chown -R node-red:root /usr/src/node-red && chmod -R g+rwX /usr/src/node-red && \
     npm uninstall node-red-node-gpio 
-    # chown -R node-red:node-red /data && \
+    # chown -R node-red:node-red /flows && \
     # chown -R node-red:node-red /usr/src/node-red
 
 # Set work directory
 WORKDIR /usr/src/node-red
 
 # package.json contains Node-RED NPM module and node dependencies
-COPY logo.png /data 
+COPY logo.png /flows 
 COPY logo.png .
 
 COPY favicon.ico .
-COPY favicon.ico /data
+COPY favicon.ico /flows
 
 COPY package.json .
+COPY package.json /flows 
 
 COPY settings.js .
-COPY settings.js /data
+COPY settings.js /flows
 
+COPY flows.json /flows
 COPY flows.json /data
-
 #### Stage BUILD #######################################################################################################
 FROM base AS build
+
+
+
+
+
 
 # Install Build tools
 RUN apk add --no-cache --virtual buildtools build-base linux-headers udev python && \
@@ -58,8 +65,27 @@ RUN apk add --no-cache --virtual buildtools build-base linux-headers udev python
 
 
 COPY settings.js .
-COPY settings.js /data
+COPY settings.js /flows
 
+
+
+WORKDIR /usr/src/node-red
+
+# package.json contains Node-RED NPM module and node dependencies
+COPY logo.png /flows 
+COPY logo.png .
+
+COPY favicon.ico .
+COPY favicon.ico /flows
+
+COPY package.json .
+COPY package.json /flows 
+
+COPY settings.js .
+COPY settings.js /flows
+
+COPY flows.json /flows
+COPY flows.json /data
 
 #### Stage RELEASE #####################################################################################################
 FROM base AS RELEASE
@@ -69,6 +95,29 @@ ARG BUILD_REF
 ARG NODE_RED_VERSION
 ARG ARCH
 ARG TAG_SUFFIX=default
+
+
+
+
+WORKDIR /usr/src/node-red
+
+# package.json contains Node-RED NPM module and node dependencies
+COPY logo.png /flows 
+COPY logo.png .
+
+COPY favicon.ico .
+COPY favicon.ico /flows
+
+COPY package.json .
+COPY package.json /flows 
+
+COPY settings.js .
+COPY settings.js /flows
+
+COPY flows.json /flows
+COPY flows.json /data
+
+
 
 LABEL org.label-schema.build-date=${BUILD_DATE} \
     org.label-schema.docker.dockerfile=".docker/Dockerfile.custom" \
@@ -87,6 +136,8 @@ COPY --from=build /usr/src/node-red/prod_node_modules ./node_modules
 
 # Chown, install devtools & Clean up
 RUN chown -R node-red:root /usr/src/node-red && \
+    chown -R node-red:root /flows && \
+    chown -R node-red:root /data && \
     /tmp/install_devtools.sh && \
     npm install  node-red-node-tigergraph && \
     rm -r /tmp/*
@@ -95,8 +146,8 @@ USER node-red
 
 # Env variables
 ENV NODE_RED_VERSION=$NODE_RED_VERSION \
-    NODE_PATH=/usr/src/node-red/node_modules:/data/node_modules:/data \
-    FLOWS=flows.json
+    NODE_PATH=/usr/src/node-red/node_modules:/flows/node_modules:/flows:/data \
+    FLOWS=flows.json 
 
 # ENV NODE_RED_ENABLE_SAFE_MODE=true    # Uncomment to enable safe start mode (flows not running)
 # ENV NODE_RED_ENABLE_PROJECTS=true     # Uncomment to enable projects option
@@ -107,4 +158,4 @@ EXPOSE 1880
 # Add a healthcheck (default every 30 secs)
 HEALTHCHECK CMD curl http://localhost:1880/ || exit 1
 
-ENTRYPOINT ["npm", "start", "--cache", "/data/.npm", "--", "--userDir", "/data"]
+ENTRYPOINT ["npm", "start", "--cache", "/flows/.npm", "--", "--userDir", "/flows"]
