@@ -1,12 +1,12 @@
 {
-    "name": "tiger-flow-docker",
+    "name": "graph-flow-docker",
     "version": "1.0.0",
     "description": "Low-code programming for event-driven applications",
     "homepage": "https://tigergraph.com",
     "license": "Apache-2.0",
     "repository": {
         "type": "git",
-        "url": "https://github.com/node-red/node-red-docker.git"
+        "url": "https://github.com/zrougamed/TigerFlow.git"
     },
     "main": "node_modules/node-red/red/red.js",
     "scripts": {
@@ -26,6 +26,9 @@
         },
         {
             "name": "Raymond Mouthaan"
+        },
+        {
+            "name": "Mohamed Zrouga"
         }
     ],
     "dependencies": {
