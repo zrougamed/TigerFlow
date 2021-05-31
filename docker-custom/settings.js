@@ -88,12 +88,12 @@ module.exports = {
     // Customising the editor
     editorTheme: {
         page: {
-            title: "tigerflow by Node-RED",
+            title: "TigerFlow by Node-RED",
             favicon: "/usr/src/node-red/favicon.ico"
             
         },
         header: {
-            title: "tigerflow",
+            title: "TigerFlow",
             image: "/usr/src/node-red/logo.png", // or null to remove image
             url: "https://tigergraph.com" // optional url to make the header text/image a link to this url
         }
