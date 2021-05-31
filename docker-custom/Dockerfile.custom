@@ -122,7 +122,7 @@ COPY flows.json /data
 LABEL org.label-schema.build-date=${BUILD_DATE} \
     org.label-schema.docker.dockerfile=".docker/Dockerfile.custom" \
     org.label-schema.license="Apache-2.0" \
-    org.label-schema.name="GraphFlow" \
+    org.label-schema.name="tigerflow" \
     org.label-schema.version=${BUILD_VERSION} \
     org.label-schema.description="Low-code programming for event-driven applications." \
     org.label-schema.url="https://tigergraph.com" \
